@@ -18,5 +18,5 @@ notice_text = """
 FreeMedia  Copyright (C) 2026  Anatnaso
    This program comes with ABSOLUTELY NO WARRANTY; see `LICENSE.md`.
    This is free software, and you are welcome to redistribute it
-   under certain conditions; see `LICENSE.md`
+   under certain conditions; see `LICENSE.md`.
 """.strip()

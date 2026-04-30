@@ -37,7 +37,7 @@ build-backend = "uv_build"
 
 [tool.uv.build-backend]
 module-name = [
-    "freemedia_shared",
+    "freemedia_miscellaneous",
     "freemedia_settings",
     "freemedia_database",
     "freemedia_application",
