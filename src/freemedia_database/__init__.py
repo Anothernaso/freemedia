@@ -16,7 +16,7 @@
 
 
 from sqlalchemy import Engine
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine
 
 from freemedia_settings import settings
 
@@ -34,3 +34,7 @@ def get_engine() -> Engine:
 
 def create_metadata() -> None:
     SQLModel.metadata.create_all(get_engine())
+
+
+def get_session() -> Session:
+    return Session(get_engine())

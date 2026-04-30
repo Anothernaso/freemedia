@@ -16,7 +16,7 @@
 
 import uvicorn
 
-from freemedia_shared import notice
+from freemedia_miscellaneous import notice
 
 
 def main():
