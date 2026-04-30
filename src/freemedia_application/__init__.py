@@ -17,6 +17,8 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from freemedia_database import create_metadata
 
@@ -30,6 +32,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
 @app.get("/")
-async def root():
-    return {"hello": "world"}
+def root():
+    return RedirectResponse(url="/static/index.html")
