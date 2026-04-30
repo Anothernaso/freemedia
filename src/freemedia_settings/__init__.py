@@ -20,6 +20,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class FreeMediaSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
+    freemedia_uvicorn_host: str = "localhost"
+    freemedia_uvicorn_port: int = 4678
+    freemedia_uvicorn_workers: int = 4
+
     freemedia_database_url: str = "postgresql://default:secret@localhost:5432/freemedia"
 
 

@@ -17,6 +17,7 @@
 import uvicorn
 
 from freemedia_miscellaneous import notice
+from freemedia_settings import settings
 
 
 def main():
@@ -24,9 +25,9 @@ def main():
 
     uvicorn.run(
         "freemedia_application:app",
-        host="0.0.0.0",
-        port=8000,
-        workers=4,
+        host=settings.freemedia_uvicorn_host,
+        port=settings.freemedia_uvicorn_port,
+        workers=settings.freemedia_uvicorn_workers,
     )
 
 
