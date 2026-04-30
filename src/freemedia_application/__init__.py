@@ -14,11 +14,22 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
-app = FastAPI()
+from freemedia_database import create_metadata
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_metadata()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
-def root():
+async def root():
     return {"hello": "world"}

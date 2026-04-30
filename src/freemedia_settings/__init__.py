@@ -20,8 +20,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class FreeMediaSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
-    freemedia_redis_host: str = "localhost"
-    freemedia_redis_port: int = 6379
+    freemedia_database_url: str = "postgresql://default:secret@localhost:5432/freemedia"
 
 
 settings = FreeMediaSettings()

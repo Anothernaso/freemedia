@@ -14,12 +14,23 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import redis
 
-from .settings import settings
+from sqlalchemy import Engine
+from sqlmodel import SQLModel, create_engine
 
-key_prefix = "freemedia"
-redis_conn = redis.Redis(
-    host=settings.freemedia_redis_host,
-    port=settings.freemedia_redis_port,
-)
+from freemedia_settings import settings
+
+_engine: Engine | None = None
+
+
+def get_engine() -> Engine:
+    global _engine
+
+    if not _engine:
+        _engine = create_engine(settings.freemedia_database_url, echo=True)
+
+    return _engine
+
+
+def create_metadata() -> None:
+    SQLModel.metadata.create_all(get_engine())
