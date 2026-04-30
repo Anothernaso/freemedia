@@ -22,6 +22,8 @@ from fastapi.staticfiles import StaticFiles
 
 from freemedia_database import create_metadata
 
+from . import api
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,7 +33,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
+app.include_router(api.router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 

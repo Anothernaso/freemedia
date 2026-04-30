@@ -16,7 +16,11 @@
 
 from typing import TYPE_CHECKING
 
+from sqlalchemy import Column
+from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, Relationship, SQLModel
+
+from .post_status import PostStatus
 
 if TYPE_CHECKING:
     from .media_file import MediaFile
@@ -25,10 +29,15 @@ if TYPE_CHECKING:
 class MediaPost(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    title: str = Field(min_length=3, max_length=50)
-    description: str
+    title: str = Field(default="[PLACEHOLDER]", min_length=3, max_length=50)
+    description: str = Field(default="")
 
-    primary_file_id: int | None = Field(default=None, foreign_key="media_file.id")
+    status: PostStatus = Field(
+        default=PostStatus.DRAFT,
+        sa_column=Column(SAEnum(PostStatus)),
+    )
+
+    primary_file_id: int | None = Field(default=None, foreign_key="mediafile.id")
     primary_file: MediaFile | None = Relationship()
 
     files: list[MediaFile] = Relationship(back_populates="post")
