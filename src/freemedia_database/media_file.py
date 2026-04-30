@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class MediaFile(SQLModel, table=True):
-    id: int = Field(nullable=False, unique=True, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
 
-    post_id: int = Field(nullable=False, foreign_key="media_post.id")
+    post_id: int = Field(foreign_key="media_post.id")
     post: MediaPost = Relationship(back_populates="files")

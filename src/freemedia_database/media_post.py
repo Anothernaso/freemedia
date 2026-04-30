@@ -7,13 +7,12 @@ if TYPE_CHECKING:
 
 
 class MediaPost(SQLModel, table=True):
-    id: int | None = Field(default=None, nullable=False, unique=True, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
 
-    title: str = Field(nullable=False, min_length=3, max_length=50)
-    description: str = Field(nullable=False)
+    title: str = Field(min_length=3, max_length=50)
+    description: str
 
-    primary_file: int | None = Field(
-        default=None, nullable=True, foreign_key="media_file.id"
-    )
+    primary_file_id: int | None = Field(default=None, foreign_key="media_file.id")
+    primary_file: MediaFile | None = Relationship()
 
     files: list[MediaFile] = Relationship(back_populates="post")
