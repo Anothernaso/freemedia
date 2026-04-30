@@ -1,3 +1,5 @@
+This file contains notices to be pasted at the beginning of each source file:
+
 # FreeMedia: Simple infrastructure for hosting different kinds of media.
 #     Copyright (C) 2026  Anatnaso
 #
@@ -13,18 +15,3 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-[project]
-name = "freemedia"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
-
-[project.scripts]
-main = "freemedia:main"
-
-[build-system]
-requires = ["uv_build>=0.11"]
-build-backend = "uv_build"
