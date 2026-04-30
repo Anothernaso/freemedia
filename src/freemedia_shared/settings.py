@@ -14,7 +14,14 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/dist
-/.venv
-/.env
-__pycache__
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class FreeMediaSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
+    freemedia_redis_host: str = "localhost"
+    freemedia_redis_port: int = 6379
+
+
+settings = FreeMediaSettings()
