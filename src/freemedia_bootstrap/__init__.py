@@ -28,6 +28,7 @@ def main():
         host=settings.freemedia_uvicorn_host,
         port=settings.freemedia_uvicorn_port,
         workers=settings.freemedia_uvicorn_workers,
+        reload=settings.freemedia_uvicorn_reload,
     )
 
 

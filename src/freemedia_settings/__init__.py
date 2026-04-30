@@ -23,6 +23,7 @@ class FreeMediaSettings(BaseSettings):
     freemedia_uvicorn_host: str = "localhost"
     freemedia_uvicorn_port: int = 4678
     freemedia_uvicorn_workers: int = 4
+    freemedia_uvicorn_reload: bool = False
 
     freemedia_database_url: str = "postgresql://default:secret@localhost:5432/freemedia"
 
