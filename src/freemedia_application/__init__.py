@@ -14,10 +14,11 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from fastapi import FastAPI
 
-def main():
-    print("Hello from freemedia!")
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+def root():
+    return {"hello": "world"}

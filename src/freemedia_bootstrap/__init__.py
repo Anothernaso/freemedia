@@ -14,24 +14,21 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-[project]
-name = "freemedia"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.14"
-dependencies = [
-    "fastapi>=0.136",
-    "redis>=7",
-    "uvicorn>=0.46",
-]
+import uvicorn
 
-[project.scripts]
-main = "freemedia_bootstrap:main"
+from freemedia_shared import notice
 
-[build-system]
-requires = ["uv_build>=0.11"]
-build-backend = "uv_build"
 
-[tool.uv.build-backend]
-module-name = ["freemedia_shared", "freemedia_application", "freemedia_bootstrap"]
+def main():
+    print(notice.notice_text + "\n")
+
+    uvicorn.run(
+        "freemedia_application:app",
+        host="0.0.0.0",
+        port=8000,
+        workers=4,
+    )
+
+
+if __name__ == "__main__":
+    main()
