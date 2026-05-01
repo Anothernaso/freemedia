@@ -33,7 +33,9 @@ def get_engine() -> Engine:
     global _engine
 
     if not _engine:
-        _engine = create_engine(settings.freemedia_database_url, echo=True)
+        _engine = create_engine(
+            settings.freemedia_database_url, echo=settings.freemedia_database_echo
+        )
 
     return _engine
 

@@ -26,6 +26,8 @@ class FreeMediaSettings(BaseSettings):
     freemedia_uvicorn_reload: bool = False
 
     freemedia_database_url: str = "postgresql://default:secret@localhost:5432/freemedia"
+    freemedia_database_echo: bool = False
+
     freemedia_application_title: str = "FreeMedia"
 
 
