@@ -14,9 +14,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 from fastapi import APIRouter, Depends
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from freemedia_database import get_session
 from freemedia_database.media_post import MediaPost
@@ -24,10 +23,25 @@ from freemedia_database.media_post import MediaPost
 router = APIRouter(prefix="/post", tags=["post"])
 
 
-@router.post("/api/post")
-def create_post(post: MediaPost, session: Session = Depends(get_session)):
+@router.post("/")
+async def post_post(post: MediaPost, session: Session = Depends(get_session)):
     session.add(post)
     session.commit()
     session.refresh(post)
+
+    return post
+
+
+@router.get("/")
+async def get_posts(session: Session = Depends(get_session)):
+    stmt = select(MediaPost)
+    posts = session.exec(stmt).all()
+
+    return posts
+
+
+@router.get("/{post_id}")
+async def get_post(post_id: int, session: Session = Depends(get_session)):
+    post = session.get(MediaPost, post_id)
 
     return post

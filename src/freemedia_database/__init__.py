@@ -20,6 +20,12 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from freemedia_settings import settings
 
+from .media_file import MediaFile
+from .media_post import MediaPost
+
+__all__ = ["MediaFile", "MediaPost"]
+
+
 _engine: Engine | None = None
 
 

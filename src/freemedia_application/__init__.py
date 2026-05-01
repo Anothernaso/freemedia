@@ -38,5 +38,5 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
-def root():
+async def root():
     return RedirectResponse(url="/static/index.html")

@@ -14,16 +14,10 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import TYPE_CHECKING
-
-from sqlmodel import Field, Relationship, SQLModel
-
-if TYPE_CHECKING:
-    from .media_post import MediaPost
+from sqlmodel import Field, SQLModel
 
 
 class MediaFile(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
     post_id: int = Field(foreign_key="mediapost.id")
-    post: MediaPost = Relationship(back_populates="files")
