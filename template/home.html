@@ -1,8 +1,5 @@
-<html>
-    <head>
-        <title>{{ freemedia_application_title }}</title>
-    </head>
-    <body>
-        {% include "component/header.html" %}
-    </body>
-</html>
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+%}
+<h2>Welcome to {{ freemedia_application_title }}</h2>
+<p>Hello world.</p>
+{% endblock %}

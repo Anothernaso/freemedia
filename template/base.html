@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            {% block title %}{{ freemedia_application_title }}{% endblock %}
+        </title>
+    </head>
+    <body>
+        {% include "component/header.html" %}
+
+        <main>{% block content %} {% endblock %}</main>
+    </body>
+</html>
