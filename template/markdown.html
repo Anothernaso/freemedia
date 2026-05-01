@@ -1,0 +1,47 @@
+<!--
+FreeMedia: Simple infrastructure for hosting different kinds of media.
+    Copyright (C) 2026  Anatnaso
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+{% extends "base.html" %} {% block title %} {{ freemedia_request_static_path }}
+{% endblock %} {% block content %}
+<h2>{{ freemedia_request_static_path }}</h2>
+<a href="{{ freemedia_request_static_path }}">View Raw</a>
+<div id="markdownContent"></div>
+
+<script>
+    console.log("{{ freemedia_request_static_path }}");
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        const markdownContent = document.getElementById("markdownContent");
+
+        var response = await fetch("{{ freemedia_request_static_path }}");
+        const markdown = await response.text();
+
+        var response = await fetch("/api/misc/markdown", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/markdown",
+            },
+            body: markdown,
+        });
+        const content = await response.text();
+        console.log(content);
+        markdownContent.innerHTML = content;
+    });
+</script>
+
+{% endblock %}

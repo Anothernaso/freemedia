@@ -14,24 +14,13 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response
+from markdown import markdown
 
-from freemedia_template import context, templates
-
-router = APIRouter(prefix="/page", tags=["page"])
-
-
-@router.get("/home")
-async def get_home(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="home.html", context=context
-    )
+router = APIRouter(prefix="/misc", tags=["misc"])
 
 
-@router.get("/markdown/{static_path:path}")
-async def get_markdown(request: Request, static_path: str):
-    return templates.TemplateResponse(
-        request=request,
-        name="markdown.html",
-        context=(context | {"freemedia_request_static_path": "/" + static_path}),
-    )
+@router.post("/markdown")
+async def post_markdown(request: Request):
+    html = markdown((await request.body()).decode())
+    return Response(content=html, media_type="text/html")
