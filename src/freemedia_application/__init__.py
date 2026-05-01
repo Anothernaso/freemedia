@@ -22,7 +22,7 @@ from fastapi.staticfiles import StaticFiles
 
 from freemedia_database import create_metadata
 
-from . import api
+from . import api, page
 
 
 @asynccontextmanager
@@ -34,9 +34,10 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(api.router)
+app.include_router(page.router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/static/index.html")
+    return RedirectResponse(url="/page/home")

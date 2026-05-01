@@ -22,6 +22,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.136",
+    "jinja2>=3",
     "psycopg2>=2",
     "pydantic-settings>=2",
     "sqlmodel>=0.0.38",
@@ -29,7 +30,7 @@ dependencies = [
 ]
 
 [project.scripts]
-main = "freemedia_bootstrap:main"
+freemedia = "freemedia_bootstrap:main"
 
 [build-system]
 requires = ["uv_build>=0.11"]
@@ -40,6 +41,7 @@ module-name = [
     "freemedia_miscellaneous",
     "freemedia_settings",
     "freemedia_database",
+    "freemedia_template",
     "freemedia_application",
     "freemedia_bootstrap",
 ]
