@@ -35,7 +35,9 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(api.router)
 app.include_router(page.router)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/static", StaticFiles(directory="static", follow_symlink=True), name="static"
+)
 
 
 @app.get("/")
