@@ -17,8 +17,9 @@
 
 from fastapi import APIRouter
 
-from . import misc, post
+from . import form, misc, post
 
 router = APIRouter(prefix="/api", tags=["api"])
+router.include_router(form.router)
 router.include_router(misc.router)
 router.include_router(post.router)

@@ -26,7 +26,18 @@ async def get_home(request: Request):
     templates = get_templates()
 
     return templates.TemplateResponse(
-        request=request, name="home.html", context=get_context()
+        request=request, name="page/home.html", context=get_context()
+    )
+
+
+@router.get("/create_post")
+async def get_create_post(request: Request):
+    templates = get_templates()
+
+    return templates.TemplateResponse(
+        request=request,
+        name="page/create_post.html",
+        context=get_context(),
     )
 
 
@@ -36,6 +47,6 @@ async def get_markdown(request: Request, static_path: str):
 
     return templates.TemplateResponse(
         request=request,
-        name="markdown.html",
+        name="page/markdown.html",
         context=get_context({"freemedia_request_static_path": "/" + static_path}),
     )
