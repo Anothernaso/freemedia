@@ -32,11 +32,14 @@ async def post_submit_post(
     session: Session = Depends(get_session),
 ):
     post = MediaPost()
-    post.status = PostStatus.PENDING
+    post.status = PostStatus.DRAFT
     if title:
         post.title = title
     if description:
         post.description = description
+
+    # Only set the post to `PENDING` after all properties have been set
+    post.status = PostStatus.PENDING
 
     session.add(post)
     session.commit()

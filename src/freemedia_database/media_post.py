@@ -14,6 +14,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from datetime import datetime, timezone
+
 from sqlalchemy import Column
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
@@ -33,3 +35,7 @@ class MediaPost(SQLModel, table=True):
     )
 
     primary_file_id: int | None = Field(default=None, foreign_key="mediafile.id")
+
+    datetime_created: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
