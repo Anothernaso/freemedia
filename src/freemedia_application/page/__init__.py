@@ -14,39 +14,12 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 
-from freemedia_template import get_context, get_templates
+from . import create_post, home, markdown, view_post
 
 router = APIRouter(prefix="/page", tags=["page"])
-
-
-@router.get("/home")
-async def get_home(request: Request):
-    templates = get_templates()
-
-    return templates.TemplateResponse(
-        request=request, name="page/home.html", context=get_context()
-    )
-
-
-@router.get("/create_post")
-async def get_create_post(request: Request):
-    templates = get_templates()
-
-    return templates.TemplateResponse(
-        request=request,
-        name="page/create_post.html",
-        context=get_context(),
-    )
-
-
-@router.get("/markdown/{static_path:path}")
-async def get_markdown(request: Request, static_path: str):
-    templates = get_templates()
-
-    return templates.TemplateResponse(
-        request=request,
-        name="page/markdown.html",
-        context=get_context({"freemedia_request_static_path": "/" + static_path}),
-    )
+router.include_router(create_post.router)
+router.include_router(home.router)
+router.include_router(markdown.router)
+router.include_router(view_post.router)

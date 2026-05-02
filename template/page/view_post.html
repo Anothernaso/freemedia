@@ -16,15 +16,10 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-{% extends "base.html" %} {% block title %} Create Post {% endblock %} {% block
-content %}
-<h2>Create Post</h2>
+{% extends "base.html" %} {% block title %} {{ freemedia_request_post_title }}
+{% endblock %} {% block content %}
+<h2>{{ freemedia_request_post_title }}</h2>
 
-<form action="/api/form/submit_post" method="post">
-    <input type="text" name="title" placeholder="Title" /> <br />
-    <textarea name="description" placeholder="Description"></textarea> <br />
-
-    <button type="submit">Submit</button> <br />
-</form>
+<p>{{ freemedia_request_post_description }}</p>
 
 {% endblock %}

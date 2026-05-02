@@ -4,6 +4,7 @@ from sqlmodel import Session
 
 from freemedia_database import get_session
 from freemedia_database.media_post import MediaPost
+from freemedia_database.post_status import PostStatus
 
 router = APIRouter(prefix="/submit_post", tags=["submit_post"])
 
@@ -15,6 +16,7 @@ async def post_submit_post(
     session: Session = Depends(get_session),
 ):
     post = MediaPost()
+    post.status = PostStatus.PENDING
     if title:
         post.title = title
     if description:
