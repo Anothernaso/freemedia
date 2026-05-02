@@ -22,8 +22,9 @@ from freemedia_settings import get_settings
 
 from .media_file import MediaFile
 from .media_post import MediaPost
+from .post_status import PostStatus
 
-__all__ = ["MediaFile", "MediaPost"]
+__all__ = ["MediaFile", "MediaPost", "PostStatus"]
 
 
 _engine: Engine | None = None

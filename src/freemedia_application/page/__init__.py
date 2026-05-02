@@ -16,10 +16,11 @@
 
 from fastapi import APIRouter
 
-from . import create_post, home, markdown, view_post
+from . import create_post, home, markdown, submission_notice, view_post
 
 router = APIRouter(prefix="/page", tags=["page"])
 router.include_router(create_post.router)
 router.include_router(home.router)
 router.include_router(markdown.router)
+router.include_router(submission_notice.router)
 router.include_router(view_post.router)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form
+from fastapi import APIRouter, Depends, Form, status
 from fastapi.responses import RedirectResponse
 from sqlmodel import Session
 
@@ -26,4 +26,6 @@ async def post_submit_post(
     session.commit()
     session.refresh(post)
 
-    return RedirectResponse(f"/page/view_post/{post.id}", status_code=303)
+    return RedirectResponse(
+        f"/page/submission_notice/{post.id}", status_code=status.HTTP_303_SEE_OTHER
+    )

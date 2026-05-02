@@ -4,14 +4,13 @@ from sqlmodel import Session
 from freemedia_database import MediaPost, PostStatus, get_session
 from freemedia_template import get_context, get_templates
 
-router = APIRouter(prefix="/view_post", tags=["view_post"])
+router = APIRouter(prefix="/submission_notice", tags=["submission_notice"])
 
 
 @router.get("/{post_id}")
-async def get_view_post(
+async def get_submission_notice(
     request: Request, post_id: int, session: Session = Depends(get_session)
 ):
-    templates = get_templates()
 
     post = session.get(MediaPost, post_id)
     if not post:
@@ -19,20 +18,20 @@ async def get_view_post(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No such post: {post_id}"
         )
 
-    if post.status != PostStatus.PUBLISHED:
+    if post.status != PostStatus.PENDING:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Post has not been published: {post_id}",
+            detail=f"Post is not pending review: {post_id}",
         )
+
+    templates = get_templates()
 
     return templates.TemplateResponse(
         request,
-        name="page/view_post.html",
+        "page/submission_notice.html",
         context=get_context(
             {
-                "freemedia_request_post_id": post.id,
-                "freemedia_request_post_title": post.title,
-                "freemedia_request_post_description": post.description,
+                "freemedia_request_post_id": post_id,
             }
         ),
     )

@@ -16,10 +16,20 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<footer>
-    <h2>End of Page</h2>
-    <nav>
-        <a href="/page/markdown/static/LICENSE.md">LICENSE.md</a>
-    </nav>
-    <p1>{{ freemedia_legal_notice }}</p1>
-</footer>
+{% extends "base.html" %} {% block title %} Submission Notice {% endblock %} {%
+block content %}
+<h2>Submission Notice</h2>
+
+<p>
+    Your post has been submitted successfully. <br />
+    For security reasons, your post will be unavailable until it has been
+    reviewed by moderators.
+</p>
+
+<p>
+    The following link will take you to your post once it has been reviewed; it
+    will not work until then:
+</p>
+<a href="/page/view_post/{{ freemedia_request_post_id }}">Your Post</a>
+
+{% endblock %}

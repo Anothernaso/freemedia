@@ -10,7 +10,7 @@ async def get_create_post(request: Request):
     templates = get_templates()
 
     return templates.TemplateResponse(
-        request=request,
+        request,
         name="page/create_post.html",
         context=get_context(),
     )

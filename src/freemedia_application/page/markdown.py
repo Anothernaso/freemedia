@@ -10,7 +10,7 @@ async def get_markdown(request: Request, static_path: str):
     templates = get_templates()
 
     return templates.TemplateResponse(
-        request=request,
+        request,
         name="page/markdown.html",
         context=get_context(
             {
