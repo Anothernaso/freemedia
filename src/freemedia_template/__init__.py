@@ -15,13 +15,35 @@
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+from typing import Any
+
 from fastapi.templating import Jinja2Templates
 
-from freemedia_miscellaneous import notice
-from freemedia_settings import settings
+from freemedia_miscellaneous.notice import get_notice_text
+from freemedia_settings import get_settings
 
-templates = Jinja2Templates(directory="template")
-context: dict[str, str] = {
-    "freemedia_application_title": settings.freemedia_application_title,
-    "freemedia_legal_notice": notice.notice_text,
-}
+_templates: Jinja2Templates | None = None
+_context: dict[str, str] | None = None
+
+
+def get_templates() -> Jinja2Templates:
+    global _templates
+
+    if not _templates:
+        _templates = Jinja2Templates(directory="template")
+
+    return _templates
+
+
+def get_context(additional_context: dict[Any, Any] = {}) -> dict[str, str]:
+    global _context
+
+    settings = get_settings()
+
+    if not _context:
+        _context = {
+            "freemedia_application_title": settings.freemedia_application_title,
+            "freemedia_legal_notice": get_notice_text(),
+        }
+
+    return _context | additional_context

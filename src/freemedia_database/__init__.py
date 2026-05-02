@@ -18,7 +18,7 @@
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
-from freemedia_settings import settings
+from freemedia_settings import get_settings
 
 from .media_file import MediaFile
 from .media_post import MediaPost
@@ -31,6 +31,8 @@ _engine: Engine | None = None
 
 def get_engine() -> Engine:
     global _engine
+
+    settings = get_settings()
 
     if not _engine:
         _engine = create_engine(

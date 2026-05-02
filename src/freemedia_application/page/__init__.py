@@ -16,22 +16,26 @@
 
 from fastapi import APIRouter, Request
 
-from freemedia_template import context, templates
+from freemedia_template import get_context, get_templates
 
 router = APIRouter(prefix="/page", tags=["page"])
 
 
 @router.get("/home")
 async def get_home(request: Request):
+    templates = get_templates()
+
     return templates.TemplateResponse(
-        request=request, name="home.html", context=context
+        request=request, name="home.html", context=get_context()
     )
 
 
 @router.get("/markdown/{static_path:path}")
 async def get_markdown(request: Request, static_path: str):
+    templates = get_templates()
+
     return templates.TemplateResponse(
         request=request,
         name="markdown.html",
-        context=(context | {"freemedia_request_static_path": "/" + static_path}),
+        context=get_context({"freemedia_request_static_path": "/" + static_path}),
     )

@@ -14,9 +14,18 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-notice_text = """
-FreeMedia  Copyright (C) 2026  Anatnaso
-   This program comes with ABSOLUTELY NO WARRANTY; see `LICENSE.md`.
-   This is free software, and you are welcome to redistribute it
-   under certain conditions; see `LICENSE.md`.
-""".strip()
+_notice_text: str | None = None
+
+
+def get_notice_text() -> str:
+    global _notice_text
+
+    if not _notice_text:
+        _notice_text = """
+        FreeMedia  Copyright (C) 2026  Anatnaso
+           This program comes with ABSOLUTELY NO WARRANTY; see `LICENSE.md`.
+           This is free software, and you are welcome to redistribute it
+           under certain conditions; see `LICENSE.md`.
+        """.strip()
+
+    return _notice_text

@@ -31,4 +31,13 @@ class FreeMediaSettings(BaseSettings):
     freemedia_application_title: str = "FreeMedia"
 
 
-settings = FreeMediaSettings()
+_settings: FreeMediaSettings | None = None
+
+
+def get_settings() -> FreeMediaSettings:
+    global _settings
+
+    if not _settings:
+        _settings = FreeMediaSettings()
+
+    return _settings

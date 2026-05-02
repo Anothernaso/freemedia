@@ -16,12 +16,14 @@
 
 import uvicorn
 
-from freemedia_miscellaneous import notice
-from freemedia_settings import settings
+from freemedia_miscellaneous.notice import get_notice_text
+from freemedia_settings import get_settings
 
 
 def main():
-    print(notice.notice_text + "\n")
+    settings = get_settings()
+
+    print(get_notice_text() + "\n")
 
     uvicorn.run(
         "freemedia_application:app",
