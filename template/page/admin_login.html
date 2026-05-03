@@ -16,12 +16,23 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<header>
-    <a href="/page/home">
-        <h1>{{ freemedia_application_title }}</h1>
-        <nav>
-            <a href="/page/admin_login">Administrator Login</a>
-            <a href="/page/create_post">Create Post</a>
-        </nav>
-    </a>
-</header>
+{% extends "base.html" %} {% block title %} Administrator Login {% endblock %}
+{% block content %}
+<h2>Administrator Login</h2>
+
+<form
+    action="/api/form/admin_login"
+    method="post"
+    enctype="multipart/form-data"
+>
+    <input
+        type="password"
+        name="passphrase"
+        placeholder="Administration Passphrase"
+    />
+    <br />
+
+    <button type="submit">Log In</button> <br />
+</form>
+
+{% endblock %}
