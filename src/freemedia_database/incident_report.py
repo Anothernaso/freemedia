@@ -16,15 +16,23 @@
 
 from datetime import datetime, timezone
 
+from sqlalchemy import Column
+from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
+from .incident_type import IncidentType
 
-class MediaFile(SQLModel, table=True):
+
+class IncidentReport(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    filename: str = Field()
+    type: IncidentType = Field(
+        sa_column=Column(SAEnum(IncidentType)),
+    )
 
-    post_id: int = Field(foreign_key="mediapost.id")
+    endpoint: str | None = Field(default=None)
+    client_address: str | None = Field(default=None)
+    user_agent: str | None = Field(default=None)
 
     datetime_created: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc)

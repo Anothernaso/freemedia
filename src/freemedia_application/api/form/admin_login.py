@@ -16,11 +16,16 @@
 
 from asyncio import to_thread
 
-from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from sqlmodel import Session
 
-from freemedia_database import AdministrationSession, get_session
+from freemedia_database import (
+    AdministrationSession,
+    IncidentReport,
+    IncidentType,
+    get_session,
+)
 from freemedia_settings import get_settings
 
 router = APIRouter(prefix="/submit_post", tags=["submit_post"])
@@ -28,12 +33,24 @@ router = APIRouter(prefix="/submit_post", tags=["submit_post"])
 
 @router.post("/")
 async def post_submit_post(
+    request: Request,
     passphrase: str = Form(...),
     session: Session = Depends(get_session),
 ):
     settings = await get_settings()
 
     if passphrase != settings.freemedia_administration_passphrase:
+        report = IncidentReport(
+            type=IncidentType.UNAUTHORIZED_ADMINISTRATOR,
+            endpoint=request.url.path,
+            client_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+        )
+
+        await to_thread(session.add, report)
+        await to_thread(session.commit)
+        await to_thread(session.refresh, report)
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Wrong administration passphrase: {passphrase}; this incident will be reported.",

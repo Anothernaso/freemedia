@@ -23,9 +23,21 @@ from sqlmodel import Session, SQLModel, create_engine
 from freemedia_settings import get_settings
 
 from .administration_session import AdministrationSession
+from .incident_report import IncidentReport
+from .incident_type import IncidentType
 from .media_file import MediaFile
 from .media_post import MediaPost
 from .post_status import PostStatus
+
+__all__ = [
+    "AdministrationSession",
+    "IncidentReport",
+    "IncidentType",
+    "MediaFile",
+    "MediaPost",
+    "PostStatus",
+]
+
 
 __all__ = ["AdministrationSession", "MediaFile", "MediaPost", "PostStatus"]
 
