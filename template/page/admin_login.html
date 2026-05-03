@@ -20,6 +20,10 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
 {% block content %}
 <h2>Administrator Login</h2>
 
+{% if freemedia_request_session_expired %}
+<p>Your previous session has expired. Please log in again.</p>
+{% endif %}
+
 <form
     action="/api/form/admin_login"
     method="post"

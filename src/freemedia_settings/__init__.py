@@ -30,9 +30,10 @@ class FreeMediaSettings(BaseSettings):
     freemedia_database_url: str = "postgresql://default:secret@localhost:5432/freemedia"
     freemedia_database_echo: bool = False
 
-    freemedia_media_file_directory: str = "data/mediafile/"
+    freemedia_mediafile_directory: str = "data/mediafile/"
 
     freemedia_administration_passphrase: str = "secret"
+    freemedia_administration_session_lifetime_minutes: float = 10
 
     freemedia_application_title: str = "FreeMedia"
 

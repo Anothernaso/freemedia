@@ -22,11 +22,12 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from freemedia_settings import get_settings
 
+from .administration_session import AdministrationSession
 from .media_file import MediaFile
 from .media_post import MediaPost
 from .post_status import PostStatus
 
-__all__ = ["MediaFile", "MediaPost", "PostStatus"]
+__all__ = ["AdministrationSession", "MediaFile", "MediaPost", "PostStatus"]
 
 
 _engine: Engine | None = None

@@ -52,7 +52,7 @@ async def post_submit_post(
     await to_thread(session.commit)
     await to_thread(session.refresh, post)
 
-    media_file_dir = Path(settings.freemedia_media_file_directory)
+    media_file_dir = Path(settings.freemedia_mediafile_directory)
     await to_thread(media_file_dir.mkdir, parents=True, exist_ok=True)
 
     for index, file in enumerate(files):
