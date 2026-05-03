@@ -28,7 +28,7 @@ from freemedia_database import (
 )
 from freemedia_settings import get_settings
 
-router = APIRouter(prefix="/submit_post", tags=["submit_post"])
+router = APIRouter(prefix="/admin_login", tags=["admin_login"])
 
 
 @router.post("/")
