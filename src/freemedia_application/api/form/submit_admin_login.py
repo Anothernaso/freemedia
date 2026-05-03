@@ -32,7 +32,7 @@ router = APIRouter(prefix="/submit_admin_login", tags=["submit_admin_login"])
 
 
 @router.post("/")
-async def post_submit_post(
+async def post_submit_admin_login(
     request: Request,
     passphrase: str = Form(...),
     session: Session = Depends(get_session),

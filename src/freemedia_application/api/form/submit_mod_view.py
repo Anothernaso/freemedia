@@ -14,23 +14,18 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter, Query, Request
+from fastapi import APIRouter, Form, Query, status
+from fastapi.responses import RedirectResponse
 
-from freemedia_template import get_context, get_templates
-
-router = APIRouter(prefix="/admin_login", tags=["admin_login"])
+router = APIRouter(prefix="/submit_mod_view", tags=["submit_mod_view"])
 
 
-@router.get("/")
-async def get_admin_login(
-    request: Request, session_expired: bool = Query(default=False)
+@router.post("/")
+async def post_submit_mod_view(
+    admin_token: str = Query(...),
+    post_id: int = Form(...),
 ):
-    templates = get_templates()
-
-    return templates.TemplateResponse(
-        request,
-        name="page/admin_login.html",
-        context=await get_context(
-            {"freemedia_request_session_expired": session_expired}
-        ),
+    return RedirectResponse(
+        f"/page/view_post/{post_id}?admin_token={admin_token}",
+        status_code=status.HTTP_303_SEE_OTHER,
     )

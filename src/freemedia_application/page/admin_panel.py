@@ -14,7 +14,7 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session
 
 from freemedia_application.utility.admin_auth import try_admin_login
@@ -26,7 +26,9 @@ router = APIRouter(prefix="/admin_panel", tags=["admin_panel"])
 
 @router.get("/")
 async def get_admin_panel(
-    request: Request, admin_token: str, session: Session = Depends(get_session)
+    request: Request,
+    admin_token: str = Query(...),
+    session: Session = Depends(get_session),
 ):
     templates = get_templates()
 
@@ -37,5 +39,5 @@ async def get_admin_panel(
     return templates.TemplateResponse(
         request,
         name="page/admin_panel.html",
-        context=await get_context({}),
+        context=await get_context({"freemedia_request_admin_token": admin_token}),
     )

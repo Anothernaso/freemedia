@@ -37,7 +37,7 @@ async def get_view_post(
 
     is_admin: bool = False
     if admin_token:
-        result = try_admin_login(admin_token, session)
+        result = await try_admin_login(admin_token, session)
         if result:
             return result
         else:

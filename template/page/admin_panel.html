@@ -20,6 +20,23 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
 {% block content %}
 <h2>Administration Panel</h2>
 
-<p>Content placeholder :(</p>
+<section>
+    <h3>Moderation View</h3>
+    <form
+        action="/api/form/submit_mod_view?admin_token={{ freemedia_request_admin_token }}"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <input
+            type="number"
+            name="post_id"
+            step="1"
+            placeholder="Post Identifier"
+        />
+        <br />
+
+        <input type="submit" value="View Post" />
+    </form>
+</section>
 
 {% endblock %}
