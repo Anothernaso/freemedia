@@ -28,7 +28,7 @@ async def get_markdown(request: Request, static_path: str):
     return templates.TemplateResponse(
         request,
         name="page/markdown.html",
-        context=get_context(
+        context=await get_context(
             {
                 "freemedia_request_static_path": "/" + static_path,
             }

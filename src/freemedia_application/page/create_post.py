@@ -28,5 +28,5 @@ async def get_create_post(request: Request):
     return templates.TemplateResponse(
         request,
         name="page/create_post.html",
-        context=get_context(),
+        context=await get_context(),
     )

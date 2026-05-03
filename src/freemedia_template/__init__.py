@@ -35,10 +35,10 @@ def get_templates() -> Jinja2Templates:
     return _templates
 
 
-def get_context(additional_context: dict[Any, Any] = {}) -> dict[str, str]:
+async def get_context(additional_context: dict[Any, Any] = {}) -> dict[str, str]:
     global _context
 
-    settings = get_settings()
+    settings = await get_settings()
 
     if not _context:
         _context = {

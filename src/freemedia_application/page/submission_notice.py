@@ -14,6 +14,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from asyncio import to_thread
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import Session
 
@@ -28,7 +30,7 @@ async def get_submission_notice(
     request: Request, post_id: int, session: Session = Depends(get_session)
 ):
 
-    post = session.get(MediaPost, post_id)
+    post = await to_thread(session.get, MediaPost, post_id)
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No such post: {post_id}"
@@ -45,7 +47,7 @@ async def get_submission_notice(
     return templates.TemplateResponse(
         request,
         "page/submission_notice.html",
-        context=get_context(
+        context=await get_context(
             {
                 "freemedia_request_post_id": post_id,
             }

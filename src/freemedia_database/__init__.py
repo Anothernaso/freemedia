@@ -15,6 +15,8 @@
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+from asyncio import to_thread
+
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
@@ -30,22 +32,24 @@ __all__ = ["MediaFile", "MediaPost", "PostStatus"]
 _engine: Engine | None = None
 
 
-def get_engine() -> Engine:
+async def get_engine() -> Engine:
     global _engine
 
-    settings = get_settings()
+    settings = await get_settings()
 
     if not _engine:
-        _engine = create_engine(
-            settings.freemedia_database_url, echo=settings.freemedia_database_echo
+        _engine = await to_thread(
+            create_engine,
+            settings.freemedia_database_url,
+            echo=settings.freemedia_database_echo,
         )
 
     return _engine
 
 
-def create_metadata() -> None:
-    SQLModel.metadata.create_all(get_engine())
+async def create_metadata() -> None:
+    await to_thread(SQLModel.metadata.create_all, await get_engine())
 
 
-def get_session() -> Session:
-    return Session(get_engine())
+async def get_session() -> Session:
+    return await to_thread(Session, get_engine())

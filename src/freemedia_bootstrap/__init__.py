@@ -14,24 +14,31 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import asyncio
+
 import uvicorn
 
 from freemedia_miscellaneous.notice import get_notice_text
 from freemedia_settings import get_settings
 
 
-def main():
-    settings = get_settings()
+async def _main() -> None:
+    settings = await get_settings()
 
     print(get_notice_text() + "\n")
 
-    uvicorn.run(
+    await asyncio.to_thread(
+        uvicorn.run,
         "freemedia_application:app",
         host=settings.freemedia_uvicorn_host,
         port=settings.freemedia_uvicorn_port,
         workers=settings.freemedia_uvicorn_workers,
         reload=settings.freemedia_uvicorn_reload,
     )
+
+
+def main() -> None:
+    asyncio.run(_main())
 
 
 if __name__ == "__main__":

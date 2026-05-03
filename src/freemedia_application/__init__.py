@@ -27,7 +27,7 @@ from . import api, page
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    create_metadata()
+    await create_metadata()
     yield
 
 

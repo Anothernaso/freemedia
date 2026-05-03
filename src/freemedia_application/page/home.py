@@ -26,5 +26,5 @@ async def get_home(request: Request):
     templates = get_templates()
 
     return templates.TemplateResponse(
-        request, name="page/home.html", context=get_context()
+        request, name="page/home.html", context=await get_context()
     )

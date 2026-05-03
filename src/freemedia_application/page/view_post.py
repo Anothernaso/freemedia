@@ -14,6 +14,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from asyncio import to_thread
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import Session
 
@@ -29,7 +31,7 @@ async def get_view_post(
 ):
     templates = get_templates()
 
-    post = session.get(MediaPost, post_id)
+    post = await to_thread(session.get, MediaPost, post_id)
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No such post: {post_id}"
@@ -44,7 +46,7 @@ async def get_view_post(
     return templates.TemplateResponse(
         request,
         name="page/view_post.html",
-        context=get_context(
+        context=await get_context(
             {
                 "freemedia_request_post_id": post.id,
                 "freemedia_request_post_title": post.title,
