@@ -22,23 +22,18 @@ from freemedia_miscellaneous.notice import get_notice_text
 from freemedia_settings import get_settings
 
 
-async def _main() -> None:
-    settings = await get_settings()
+def main() -> None:
+    settings = asyncio.run(get_settings())
 
     print(get_notice_text() + "\n")
 
-    await asyncio.to_thread(
-        uvicorn.run,
+    uvicorn.run(
         "freemedia_application:app",
         host=settings.freemedia_uvicorn_host,
         port=settings.freemedia_uvicorn_port,
         workers=settings.freemedia_uvicorn_workers,
         reload=settings.freemedia_uvicorn_reload,
     )
-
-
-def main() -> None:
-    asyncio.run(_main())
 
 
 if __name__ == "__main__":

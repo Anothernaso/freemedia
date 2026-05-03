@@ -52,4 +52,4 @@ async def create_metadata() -> None:
 
 
 async def get_session() -> Session:
-    return await to_thread(Session, get_engine())
+    return await to_thread(Session, await get_engine())
