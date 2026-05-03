@@ -14,7 +14,7 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Path, Request
 
 from freemedia_template import get_context, get_templates
 
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/markdown", tags=["markdown"])
 
 
 @router.get("/{static_path:path}")
-async def get_markdown(request: Request, static_path: str):
+async def get_markdown(request: Request, static_path: str = Path(...)):
     templates = get_templates()
 
     return templates.TemplateResponse(

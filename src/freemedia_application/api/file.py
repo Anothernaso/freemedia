@@ -15,39 +15,47 @@
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from asyncio import to_thread
+from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
-from fastapi.param_functions import Query
-from sqlmodel import Session, select
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import Path as FPath
+from fastapi.responses import FileResponse
+from sqlmodel import Session
 
 from freemedia_application.utility.admin_auth import try_admin_login
 from freemedia_database import MediaFile, MediaPost, PostStatus, get_session
-from freemedia_template import get_context, get_templates
+from freemedia_settings import get_settings
 
-router = APIRouter(prefix="/view_post", tags=["view_post"])
+router = APIRouter(prefix="/file", tags=["file"])
 
 
-@router.get("/{post_id}")
-async def get_view_post(
-    request: Request,
-    post_id: int = Path(...),
+@router.get("/{file_id}")
+async def get_file(
+    file_id: int = FPath(...),
     admin_token: str | None = Query(default=None),
     session: Session = Depends(get_session),
 ):
-    templates = get_templates()
 
-    post = await to_thread(session.get, MediaPost, post_id)
-    if not post:
+    settings = await get_settings()
+
+    file = await to_thread(session.get, MediaFile, file_id)
+    if not file:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"No such post: {post_id}"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"No such file: {file_id}"
         )
 
-    statement = await to_thread(
-        (await to_thread(select, MediaFile)).where, MediaFile.post_id == post.id
-    )
-    files = await to_thread(
-        (await to_thread(session.exec, statement)).all,
-    )
+    filepath = Path(settings.freemedia_mediafile_directory) / str(file.id)
+
+    if not filepath.exists():
+        raise Exception(
+            f"Could not find filesystem file `{filepath}` referenced by zombie file `{file.id}`"
+        )
+
+    post = await to_thread(session.get, MediaPost, file.post_id)
+    if not post:
+        raise Exception(
+            f"Could not find post `{file.post_id}` referenced by zombie file `{file.id}`"
+        )
 
     #######################
     ## STATE CHECK BEGIN ##
@@ -73,14 +81,13 @@ async def get_view_post(
             detail=f"Post has not been published: {post.id}",
         )
 
-    return templates.TemplateResponse(
-        request,
-        name="page/view_post.html",
-        context=await get_context(
-            {
-                "freemedia_request_post": post,
-                "freemedia_request_post_files": files,
-                "freemedia_request_admin_token": admin_token,
-            }
-        ),
+    #######################
+    ## FILE STREAM BEGIN ##
+    #######################
+
+    return FileResponse(
+        path=filepath,
+        filename=file.filename,
+        # TODO: Use actual mimetype of file
+        media_type="application/octet-stream",
     )

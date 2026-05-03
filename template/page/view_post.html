@@ -16,10 +16,30 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-{% extends "base.html" %} {% block title %} {{ freemedia_request_post_title }}
+{% extends "base.html" %} {% block title %} {{ freemedia_request_post.title }}
 {% endblock %} {% block content %}
-<h2>{{ freemedia_request_post_title }}</h2>
 
-<p>{{ freemedia_request_post_description }}</p>
+<article>
+    <h2>{{ freemedia_request_post.title }}</h2>
+    <p>{{ freemedia_request_post.description }}</p>
+</article>
+
+<section>
+    <h2>Files</h2>
+    <ul>
+        {% for _file in freemedia_request_post_files %}
+        <li>
+            {% if freemedia_request_admin_token is none %}
+            <a href="/api/file/{{ _file.id }}">{{ _file.filename }}</a>
+            {% else %}
+            <a
+                href="/api/file/{{ _file.id }}?admin_token={{ freemedia_request_admin_token }}"
+                >{{ _file.filename }}</a
+            >
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section>
 
 {% endblock %}

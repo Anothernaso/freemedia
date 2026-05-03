@@ -17,17 +17,18 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
 -->
 
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <title>
-            {{ freemedia_application_title }} {% block title %} {% endblock %}
+            {{ freemedia_application_title }} - {% block title %} {% endblock %}
         </title>
+        {% block head %} {% endblock %}
     </head>
     <body>
         {% include "component/header.html" %}
 
         <main>{% block content %} {% endblock %}</main>
-
-        {% include "component/footer.html" %}
+        {% block body %} {% endblock %} {% include "component/footer.html" %} {%
+        block script %} {% endblock %}
     </body>
 </html>
