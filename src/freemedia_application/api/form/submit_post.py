@@ -52,8 +52,10 @@ async def post_submit_post(
     await to_thread(session.commit)
     await to_thread(session.refresh, post)
 
-    index: int = 0
-    for file in files:
+    media_file_dir = Path(settings.freemedia_media_file_directory)
+    await to_thread(media_file_dir.mkdir, parents=True, exist_ok=True)
+
+    for index, file in enumerate(files):
         filename: str
         if not file.filename:
             raise HTTPException(
@@ -72,16 +74,11 @@ async def post_submit_post(
         await to_thread(session.commit)
         await to_thread(session.refresh, media_file)
 
-        media_file_dir = Path(settings.freemedia_media_file_directory)
-        await to_thread(media_file_dir.mkdir, parents=True, exist_ok=True)
-
         def write_file() -> None:
-            with open(media_file_dir / filename, "wb") as buffer:
+            with open(media_file_dir / str(media_file.id), "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
 
         await to_thread(write_file)
-
-        index += 1
 
     # Only set the post to `PENDING` after all properties have been set
     post.status = PostStatus.PENDING
