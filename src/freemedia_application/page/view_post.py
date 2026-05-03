@@ -19,6 +19,7 @@ from asyncio import to_thread
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import Session
 
+from freemedia_application.utility.admin_auth import try_admin_login
 from freemedia_database import MediaPost, PostStatus, get_session
 from freemedia_template import get_context, get_templates
 
@@ -27,9 +28,20 @@ router = APIRouter(prefix="/view_post", tags=["view_post"])
 
 @router.get("/{post_id}")
 async def get_view_post(
-    request: Request, post_id: int, session: Session = Depends(get_session)
+    request: Request,
+    post_id: int,
+    admin_token: str | None = None,
+    session: Session = Depends(get_session),
 ):
     templates = get_templates()
+
+    is_admin: bool = False
+    if admin_token:
+        result = try_admin_login(admin_token, session)
+        if result:
+            return result
+        else:
+            is_admin = True
 
     post = await to_thread(session.get, MediaPost, post_id)
     if not post:
@@ -37,11 +49,18 @@ async def get_view_post(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No such post: {post_id}"
         )
 
-    if post.status != PostStatus.PUBLISHED:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Post has not been published: {post_id}",
-        )
+    if is_admin:
+        if post.status == PostStatus.DRAFT:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Post has not been submitted: {post_id}",
+            )
+    else:
+        if post.status != PostStatus.PUBLISHED:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Post has not been published: {post_id}",
+            )
 
     return templates.TemplateResponse(
         request,

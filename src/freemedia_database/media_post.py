@@ -16,7 +16,7 @@
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Column
+from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
@@ -37,5 +37,6 @@ class MediaPost(SQLModel, table=True):
     primary_file_id: int | None = Field(default=None, foreign_key="mediafile.id")
 
     datetime_created: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        sa_column=Column(DateTime(timezone=True)),
+        default_factory=lambda: datetime.now(timezone.utc),
     )

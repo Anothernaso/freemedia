@@ -14,20 +14,28 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from datetime import datetime, timezone
+from fastapi import APIRouter, Depends, Request
+from sqlmodel import Session
 
-from sqlalchemy import Column, DateTime
-from sqlmodel import Field, SQLModel
+from freemedia_application.utility.admin_auth import try_admin_login
+from freemedia_database import get_session
+from freemedia_template import get_context, get_templates
+
+router = APIRouter(prefix="/admin_panel", tags=["admin_panel"])
 
 
-class MediaFile(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+@router.get("/")
+async def get_admin_panel(
+    request: Request, admin_token: str, session: Session = Depends(get_session)
+):
+    templates = get_templates()
 
-    filename: str = Field()
+    result = await try_admin_login(admin_token, session)
+    if result:
+        return result
 
-    post_id: int = Field(foreign_key="mediapost.id")
-
-    datetime_created: datetime = Field(
-        sa_column=Column(DateTime(timezone=True)),
-        default_factory=lambda: datetime.now(timezone.utc),
+    return templates.TemplateResponse(
+        request,
+        name="page/admin_panel.html",
+        context=await get_context({}),
     )

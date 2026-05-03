@@ -16,7 +16,7 @@
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Column
+from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
@@ -35,5 +35,6 @@ class IncidentReport(SQLModel, table=True):
     user_agent: str | None = Field(default=None)
 
     datetime_created: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        sa_column=Column(DateTime(timezone=True)),
+        default_factory=lambda: datetime.now(timezone.utc),
     )

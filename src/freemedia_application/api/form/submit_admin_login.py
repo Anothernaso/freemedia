@@ -28,7 +28,7 @@ from freemedia_database import (
 )
 from freemedia_settings import get_settings
 
-router = APIRouter(prefix="/admin_login", tags=["admin_login"])
+router = APIRouter(prefix="/submit_admin_login", tags=["submit_admin_login"])
 
 
 @router.post("/")
@@ -62,6 +62,6 @@ async def post_submit_post(
     await to_thread(session.refresh, admin_session)
 
     return RedirectResponse(
-        f"/page/admin_panel/{admin_session.token}",
+        f"/page/admin_panel?admin_token={admin_session.token}",
         status_code=status.HTTP_303_SEE_OTHER,
     )

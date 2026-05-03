@@ -17,6 +17,7 @@
 from datetime import datetime, timezone
 from secrets import token_urlsafe
 
+from sqlalchemy import Column, DateTime
 from sqlmodel import Field, SQLModel
 
 
@@ -26,5 +27,6 @@ class AdministrationSession(SQLModel, table=True):
     token: str = Field(default_factory=lambda: token_urlsafe(), unique=True)
 
     datetime_created: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        sa_column=Column(DateTime(timezone=True)),
+        default_factory=lambda: datetime.now(timezone.utc),
     )

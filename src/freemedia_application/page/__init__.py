@@ -16,10 +16,19 @@
 
 from fastapi import APIRouter
 
-from . import admin_login, create_post, home, markdown, submission_notice, view_post
+from . import (
+    admin_login,
+    admin_panel,
+    create_post,
+    home,
+    markdown,
+    submission_notice,
+    view_post,
+)
 
 router = APIRouter(prefix="/page", tags=["page"])
 router.include_router(admin_login.router)
+router.include_router(admin_panel.router)
 router.include_router(create_post.router)
 router.include_router(home.router)
 router.include_router(markdown.router)

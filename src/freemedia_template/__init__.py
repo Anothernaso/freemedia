@@ -38,9 +38,9 @@ def get_templates() -> Jinja2Templates:
 async def get_context(additional_context: dict[Any, Any] = {}) -> dict[str, str]:
     global _context
 
-    settings = await get_settings()
-
     if not _context:
+        settings = await get_settings()
+
         _context = {
             "freemedia_application_title": settings.freemedia_application_title,
             "freemedia_legal_notice": get_notice_text(),
