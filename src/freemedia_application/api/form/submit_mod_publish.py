@@ -16,32 +16,30 @@
 
 from asyncio import to_thread
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
+from fastapi.responses import RedirectResponse
 from sqlmodel import Session
 
 from freemedia_application.utility.admin_auth import try_admin_login
-from freemedia_database import MediaPost, PostStatus, get_session
-from freemedia_template import get_context, get_templates
+from freemedia_database import (
+    MediaPost,
+    PostStatus,
+    get_session,
+)
 
-router = APIRouter(prefix="/view_post", tags=["view_post"])
+router = APIRouter(prefix="/submit_mod_publish", tags=["submit_mod_publish"])
 
 
-@router.get("/{post_id}")
-async def get_view_post(
-    request: Request,
-    post_id: int,
-    admin_token: str | None = None,
+@router.post("/")
+async def post_submit_mod_publish(
+    admin_token: str = Query(...),
+    view_post: bool = Form(default=False),
+    post_id: int = Form(...),
     session: Session = Depends(get_session),
 ):
-    templates = get_templates()
-
-    is_admin: bool = False
-    if admin_token:
-        result = await try_admin_login(admin_token, session)
-        if result:
-            return result
-        else:
-            is_admin = True
+    result = await try_admin_login(admin_token, session)
+    if result:
+        return result
 
     post = await to_thread(session.get, MediaPost, post_id)
     if not post:
@@ -55,20 +53,24 @@ async def get_view_post(
             detail=f"Post has not been submitted: {post_id}",
         )
 
-    if not is_admin and post.status == PostStatus.PENDING:
+    if post.status == PostStatus.PUBLISHED:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Post has not been published: {post_id}",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Post is already published: {post_id}",
         )
 
-    return templates.TemplateResponse(
-        request,
-        name="page/view_post.html",
-        context=await get_context(
-            {
-                "freemedia_request_post_id": post.id,
-                "freemedia_request_post_title": post.title,
-                "freemedia_request_post_description": post.description,
-            }
-        ),
+    post.status = PostStatus.PUBLISHED
+    await to_thread(session.commit)
+    await to_thread(session.refresh, post)
+
+    return (
+        RedirectResponse(
+            f"/page/view_post/{post_id}",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+        if view_post
+        else RedirectResponse(
+            f"/page/admin_panel?admin_token={admin_token}",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
     )

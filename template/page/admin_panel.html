@@ -32,10 +32,37 @@ FreeMedia: Simple infrastructure for hosting different kinds of media.
             name="post_id"
             step="1"
             placeholder="Post Identifier"
+            required
         />
         <br />
 
         <input type="submit" value="View Post" />
+    </form>
+</section>
+
+<section>
+    <h3>Moderation Publishing</h3>
+    <form
+        action="/api/form/submit_mod_publish?admin_token={{ freemedia_request_admin_token }}"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <label>
+            <input type="checkbox" name="view_post" />
+            View Post after Publishing
+        </label>
+        <br />
+
+        <input
+            type="number"
+            name="post_id"
+            step="1"
+            placeholder="Post Identifier"
+            required
+        />
+        <br />
+
+        <input type="submit" value="Publish Post" />
     </form>
 </section>
 

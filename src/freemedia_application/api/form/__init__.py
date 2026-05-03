@@ -16,9 +16,10 @@
 
 from fastapi import APIRouter
 
-from . import submit_admin_login, submit_mod_view, submit_post
+from . import submit_admin_login, submit_mod_publish, submit_mod_view, submit_post
 
 router = APIRouter(prefix="/form", tags=["form"])
 router.include_router(submit_admin_login.router)
+router.include_router(submit_mod_publish.router)
 router.include_router(submit_mod_view.router)
 router.include_router(submit_post.router)
